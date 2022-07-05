@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "721397649781",
+    "project_id": "class-project-uas",
+    "storage_bucket": "class-project-uas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721397649781:android:72d325c576924cbfa4033c",
+        "android_client_info": {
+          "package_name": "com.rizkiananda.classmeetroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721397649781-6k9g36poio8hrinr0sd43o12u55dnril.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8zW4tfOs-LfEY_GyF6jAwE9TfXdzMHFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721397649781-6k9g36poio8hrinr0sd43o12u55dnril.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
