@@ -1,55 +1,55 @@
 import 'dart:async';
-import 'package:path/path.dart';
+import 'package:classmeetroom/models/detailmapelmodel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+
 import '../models/mapel_model.dart';
-import 'package:sqflite/sqflite.dart';
 
 class Db_Helper {
-  static final Db_Helper _instance = Db_Helper._instance;
-  static Database? _database;
+  final FirebaseFirestore _dbHelper = FirebaseFirestore.instance;
 
-  final String tablename = 'Mapels';
-  final String colid = 'id';
-  final String colname = 'name';
-  final String colteachname = 'teachname';
-  final String colhari = 'hari';
-  final String coljam = 'jam';
-
-  Future<Database?> get _db async {
-    if (_database != null) {
-      return _database;
-    }
-    _database = await initDb();
-    return _database;
+  Future<List<Mapelmodel>> retrieveMapel() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _dbHelper.collection('mapel').get();
+    return snapshot.docs
+        .map((docSnapshot) => Mapelmodel.fromDocumentSnapshot(docSnapshot))
+        .toList();
   }
 
-  Future<Database?> initDb() async {
-    String dbPath = await getDatabasesPath();
-    String path = join(dbPath, "mapels.db");
-    return openDatabase(path, version: 1, onCreate: _create);
+  Future<DocumentSnapshot> getdatamapel(String DocID) async {
+    DocumentReference datamapel =
+        FirebaseFirestore.instance.collection('mapel').doc(DocID);
+    return datamapel.get();
   }
 
-  FutureOr<void> _create(Database db, int version) async {
-    var sql = '''
-      CREATE TABLE $tablename(
-        $colid INTEGER PRIMARY KEY,
-        $colname TEXT,
-        $colteachname TEXT,
-        $colhari TEXT,
-        $coljam TEXT
-      )
-    ''';
-    await db.execute(sql);
+  Future<Stream<DocumentSnapshot<Object?>>> getdataDetail(String DocID) async {
+    DocumentReference datamapel = FirebaseFirestore.instance
+        .collection('mapel')
+        .doc(DocID)
+        .collection('detail')
+        .doc();
+    return datamapel.snapshots();
   }
 
-  Future<int?> save(Mapelmodel mapelmodel) async {
-    var client = await _db;
-    return client!.insert(tablename, mapelmodel.toJson());
+  Future<List<DetailMapelModel>> retrieveMapelDetail(String DocId) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _dbHelper
+        .collection('mapel')
+        .doc(DocId)
+        .collection('detail')
+        .get();
+    return snapshot.docs
+        .map(
+            (docSnapshot) => DetailMapelModel.fromDocumentSnapshot(docSnapshot))
+        .toList();
   }
 
-  Future<List?> getAllmapels() async {
-    var client = await _db;
-    var result = await client!.query(tablename,
-        columns: [colid, colname, colteachname, colhari, coljam]);
-    return result.toList();
+  Future Adduserdata(
+      String kelas, String nisn, String name, String phone) async {
+    await _dbHelper.collection('users').add({
+      'kelas': kelas,
+      'name': name,
+      'nisn' : nisn,
+      'phone': phone
+    });
   }
 }

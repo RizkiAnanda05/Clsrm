@@ -1,32 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Mapelmodel {
-  int? id;
-  String? name;
-  String? teachname;
-  String? hari;
-  String? jam;
+  final String? id;
+  final String? name;
+  final String? teachname;
+  final String? hari;
+  final String? jam;
   Mapelmodel({
     this.id,
-    this.name,
-    this.teachname,
-    this.hari,
-    this.jam,
+    required this.name,
+    required this.teachname,
+    required this.hari,
+    required this.jam,
   });
-  factory Mapelmodel.fromJson(Map<String, dynamic> json) {
-    return Mapelmodel(
-        id: json['id'],
-        name: json['name'],
-        teachname: json['teachname'],
-        hari: json['hari']);
+
+  Map<String, dynamic> toMap() {
+    return {'name': name, 'teachname': teachname, 'hari': hari, 'jam': jam};
   }
-  Map<String, dynamic> toJson() {
-    var json = Map<String, dynamic>();
-    if (id != null) {
-      json['id'] = id;
-    }
-    json['name'] = name;
-    json['teachname'] = teachname;
-    json['hari'] = hari;
-    json['jam'] = jam;
-    return json;
-  }
+
+  Mapelmodel.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
+      : id = doc.id,
+        name = doc.data()!['name'],
+        teachname = doc.data()!['teachname'],
+        hari = doc.data()!['hari'],
+        jam = doc.data()!['jam'];
 }

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "721397649781-k3re4716ohi0t3ki0fj67kph60g65pb6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rizkiananda.classmeetroom",
+            "certificate_hash": "75e81c6da4db206f6b3bbf38d60f24335f65ff99"
+          }
+        },
+        {
           "client_id": "721397649781-6k9g36poio8hrinr0sd43o12u55dnril.apps.googleusercontent.com",
           "client_type": 3
         }

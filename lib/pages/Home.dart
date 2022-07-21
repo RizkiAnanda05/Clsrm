@@ -1,13 +1,12 @@
-import 'package:classmeetroom/Colors/colorshex.dart';
+import 'package:classmeetroom/databases/db_helper.dart';
+import 'package:classmeetroom/databases/user_auth_services.dart';
 import 'package:classmeetroom/models/controller_home.dart';
 import 'package:classmeetroom/models/mapel_model.dart';
 import 'package:classmeetroom/pages/pelajaran_ui.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-
-import '../databases/db_helper.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,189 +14,197 @@ class HomePage extends StatefulWidget {
 }
 
 class _homepage extends State<HomePage> {
-  final List<Mapelmodel> mapels = [];
-  final Db_Helper db_helper = Db_Helper();
-  final List<Mapelmodel> sampledata = [
-    Mapelmodel(
-        id: 1,
-        name: 'Matematika',
-        teachname: 'Rizki Ananda',
-        hari: 'Senin',
-        jam: '07:00')
-  ];
-
-  Future<void> getAllmapels() async {
-    mapels.clear();
-    await db_helper.getAllmapels().then((value) {
-      (value as List).forEach((json) {
-        mapels.add(Mapelmodel.fromJson(json));
-      });
-    });
-    setState(() {});
-  }
+  final users = FirebaseAuth.instance.currentUser!;
+  // final List<Mapelmodel> mapels = [];
+  // final Db_Helper db_helper = Db_Helper();
+  //final Stream<QuerySnapshot> _users =
+  //  FirebaseFirestore.instance.collection('mapel').snapshots();
+  final getuser = HomeController().firestore.collection('users');
+  Future<List<Mapelmodel>>? retrievedMapelslist;
+  List<Mapelmodel>? MapelList;
+  Db_Helper service = Db_Helper();
 
   @override
-  void initstate() {
+  void initState() {
     super.initState();
-    getAllmapels();
+    _initRetrieval();
   }
 
-  Color HexColor = Color(0xFF008DB9);
+  Future<void> _initRetrieval() async {
+    retrievedMapelslist = service.retrieveMapel();
+    MapelList = await service.retrieveMapel();
+    print(MapelList);
+  }
+
+  Color HexColor = const Color(0xFF008DB9);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: HexColor,
-        body: Column(
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.topRight,
-              children: [
-                Container(
-                    margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                    width: double.infinity,
-                    height: 250,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "Selamat Datang",
-                          style: TextStyle(fontSize: 24),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 100,
-                                  ),
+      backgroundColor: HexColor,
+      body: Column(
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topRight,
+            children: [
+              Container(
+                  margin:
+                      const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                  width: double.infinity,
+                  height: 200,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text(
+                        "Selamat Datang",
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Column(
+                              children: [
+                                FutureBuilder<DocumentSnapshot<Object?>>(
+                                  future: AuthServicesUsers()
+                                      .getdatauser(users.uid),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      // var data = snapshot.data!.data();
+                                      // print(AuthServicesUsers()
+                                      //     .getdatauser(users.uid)
+                                      //     .toString());
 
-                                  // Text(
-                                  //   "Hello User1",
-                                  //   style: TextStyle(fontSize: 20),
-                                  // ),
-                                  Text("Nisn"),
-                                  Text("Class")
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )),
-                Positioned(
-                  top: 100,
-                  child: Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 5),
-                      borderRadius: BorderRadius.circular(100),
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/onboard_image.png'),
-                          fit: BoxFit.cover),
-                    ),
+                                      // return Text(data.toString());
+
+                                      var data = snapshot.data!.data()
+                                          as Map<String, dynamic>;
+                                      snapshot.data!;
+                                      // ignore: avoid_unnecessary_containers
+                                      return Container(
+                                        margin: EdgeInsets.only(left: 24),
+                                        child: Column(
+                                          // mainAxisAlignment:
+                                          //     MainAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 35,
+                                            ),
+                                            Text(
+                                              data['name'],
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleLarge,
+                                            ),
+                                            Text(
+                                              data['nisn'],
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall,
+                                            ),
+                                            Text(
+                                              data['phone'],
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall,
+                                            ),
+                                            Text(
+                                              data['kelas'],
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall,
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      return const CircularProgressIndicator();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+              Positioned(
+                top: 70,
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 5),
+                    borderRadius: BorderRadius.circular(100),
+                    image: const DecorationImage(
+                        image: AssetImage('assets/images/onboard_image.png'),
+                        fit: BoxFit.cover),
                   ),
                 ),
-              ],
-            ),
-            Expanded(
-                child: ListView.builder(
-              itemCount: mapels.length,
-              itemBuilder: (context, index) {
-                Mapelmodel mapelmodel = mapels[index];
-                return Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    width: double.infinity,
-                    height: 150,
-                    color: Colors.white,
-                    child: Text("${mapelmodel.name}"));
-              },
+              ),
+            ],
+          ),
+          Expanded(
+            child: Scaffold(
+                body: RefreshIndicator(
+              onRefresh: _initRetrieval,
+              child: FutureBuilder(
+                  future: retrievedMapelslist,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Mapelmodel>> snapshot) {
+                    if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                      print(snapshot.data);
+                      return ListView.separated(
+                        itemCount: MapelList!.length,
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            onTap: () => Get.toNamed('/Mapel',
+                                arguments: MapelList![index]),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            title: Text(
+                              '${MapelList![index].name}',
+                              style: const TextStyle(color: Colors.black54),
+                            ),
+                            subtitle: Text('${MapelList![index].teachname}'),
+                            trailing: const Icon(Icons.arrow_right_sharp),
+                          );
+                        },
+                      );
+                    } else if (snapshot.connectionState ==
+                            ConnectionState.done &&
+                        MapelList!.isEmpty) {
+                      return Center(
+                        child: ListView(
+                          children: const <Widget>[
+                            Align(
+                                alignment: AlignmentDirectional.center,
+                                child: Text('No data available')),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  }),
             )),
-            // Column(
-            //   children: [
-            //     Container(
-            //         margin: EdgeInsets.only(bottom: 10),
-            //         width: double.infinity,
-            //         height: 150,
-            //         color: Colors.white,
-            //         child: TextButton(
-            //           style: TextButton.styleFrom(
-            //               elevation: 2, backgroundColor: Colors.white),
-            //           onPressed: () {
-            //             var value = 'Matematika';
-            //             Navigator.push(
-            //                 context,
-            //                 MaterialPageRoute(
-            //                     builder: (context) => Mapel(
-            //                           value: value,
-            //                         )));
-            //           },
-            //           child: const Text("Matematika"),
-            //         )),
-            //     Container(
-            //         margin: EdgeInsets.only(bottom: 10),
-            //         width: double.infinity,
-            //         height: 150,
-            //         color: Colors.white,
-            //         child: TextButton(
-            //           style: TextButton.styleFrom(
-            //               elevation: 2, backgroundColor: Colors.white),
-            //           onPressed: () {
-            //             var value = 'Bahasa Indonesia';
-            //             Navigator.push(
-            //                 context,
-            //                 MaterialPageRoute(
-            //                     builder: (context) => Mapel(
-            //                           value: value,
-            //                         )));
-            //           },
-            //           child: const Text("Bahasa Indonesia"),
-            //         )),
-            //     Container(
-            //         margin: EdgeInsets.only(bottom: 10),
-            //         width: double.infinity,
-            //         height: 150,
-            //         color: Colors.white,
-            //         child: TextButton(
-            //           style: TextButton.styleFrom(
-            //               elevation: 2, backgroundColor: Colors.white),
-            //           onPressed: () {
-            //             var value = 'Bahasa Inggris';
-            //             Navigator.push(
-            //                 context,
-            //                 MaterialPageRoute(
-            //                     builder: (context) => Mapel(
-            //                           value: value,
-            //                         )));
-            //           },
-            //           child: const Text("Bahasa Inggris"),
-            //         )),
-            //     Container(
-            //       margin: EdgeInsets.only(bottom: 10),
-            //       width: double.infinity,
-            //       height: 150,
-            //       color: Colors.white,
-            //       child: TextButton(
-            //         style: TextButton.styleFrom(
-            //             elevation: 2, backgroundColor: Colors.white),
-            //         onPressed: () {
-            //           var value = 'IPA';
-            //           Navigator.push(
-            //               context,
-            //               MaterialPageRoute(
-            //                   builder: (context) => Mapel(value: value)));
-            //         },
-            //         child: const Text("IPA"),
-            //       ),
-            //     ),
-            //   ],
-            // )
-          ],
-        ));
+          ),
+          TextButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              child: Text("Logout"))
+        ],
+      ),
+    );
   }
 }

@@ -1,6 +1,12 @@
+// ignore_for_file: avoid_unnecessary_containers
+
+import 'package:classmeetroom/databases/user_auth_services.dart';
 import 'package:classmeetroom/pages/Home.dart';
+import 'package:classmeetroom/pages/signup_ui.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginPages extends StatefulWidget {
   @override
@@ -8,99 +14,131 @@ class LoginPages extends StatefulWidget {
 }
 
 class _Loginpage extends State<LoginPages> {
-  final TextEditingController mapelcontroler = TextEditingController();
-  final TextEditingController hariControler = TextEditingController();
-  final TextEditingController jamControler = TextEditingController();
+  final _emailcontroller = TextEditingController();
+  final _passwordcontroller = TextEditingController();
 
-  Color HexColor = Color(0xFF008DB9);
-  bool isChecked = false;
+  void dispose() {
+    _emailcontroller.dispose();
+    _passwordcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore firebaseconect = FirebaseFirestore.instance;
-    CollectionReference mapels = firebaseconect.collection('mapel');
-    return MaterialApp(
-      home: Scaffold(
-        body: ListView(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Column(children: [
-                Text("Login",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50))
-              ]),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: mapelcontroler,
-              maxLines: 1,
-              decoration: InputDecoration(
-                  hintText: "example@gmail.com",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: hariControler,
-              maxLines: 1,
-              decoration: InputDecoration(
-                  hintText: "******",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10))),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: jamControler,
-              maxLines: 1,
-              decoration: InputDecoration(
-                  hintText: "example@gmail.com",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10))),
-            ),
-            Row(
+    return Scaffold(
+      backgroundColor: const Color(0xFF008DB9),
+    
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
               children: [
-                Checkbox(
-                    value: isChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isChecked = value!;
-                      });
-                    }),
-                Text("Remember me")
+                const SizedBox(
+                  height: 103,
+                ),
+                const Text(
+                  "Login",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(
+                  height: 111,
+                ),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Usename",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Container(
+                  height: 41,
+                  margin: const EdgeInsets.only(top: 1),
+                  padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: TextFormField(
+                    controller: _emailcontroller,
+                    style: TextStyle(color: Colors.black54),
+                    decoration: const InputDecoration(
+                      hintText: "Username",
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Password",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Container(
+                  height: 41,
+                  margin: const EdgeInsets.only(top: 1),
+                  padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white),
+                  child: TextFormField(
+                    style: TextStyle(color: Colors.black54),
+                    obscureText: true,
+                    controller: _passwordcontroller,
+                    decoration: const InputDecoration(
+                        hintText: "Password", border: InputBorder.none),
+                  ),
+                ),
               ],
             ),
-            Column(
-              children: [
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        mapels.add({
-                          'name': mapelcontroler.text,
-                          'hari': hariControler.text,
-                          'jam': jamControler.text
-                        });
-                        mapelcontroler.text = '';
-                        hariControler.text = '';
-                        jamControler.text = '';
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //   return const HomePage();
-                        // }));
-                      },
-                      child: Text("Login")),
-                )
-              ],
-            )
-          ],
-        ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0,
+        color: const Color(0xFF008DB9),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          TextButton(
+              onPressed: () {
+                Get.toNamed('/SignUp');
+              },
+              child: const Text(
+                'SignUp',
+                style: TextStyle(color: Color(0xff0803FF)),
+              )),
+          ElevatedButton(
+            onPressed: () {
+              try {
+                AuthServicesUsers()
+                    .signin(_emailcontroller.text, _passwordcontroller.text);
+                print(_emailcontroller);
+              } catch (e) {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(e.toString()),
+                      );
+                    });
+              }
+            },
+            style: ElevatedButton.styleFrom(
+                primary: const Color(0xff0DABB5),
+                fixedSize: const Size(87, 29),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12))),
+            child: const Text('Login'),
+          )
+        ]),
       ),
     );
   }
