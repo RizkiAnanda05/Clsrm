@@ -27,7 +27,6 @@ class _Loginpage extends State<LoginPages> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF008DB9),
-    
       body: ListView(
         children: [
           Padding(
@@ -62,13 +61,12 @@ class _Loginpage extends State<LoginPages> {
                   margin: const EdgeInsets.only(top: 1),
                   padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white),
                   child: TextFormField(
                     controller: _emailcontroller,
                     style: TextStyle(color: Colors.black54),
                     decoration: const InputDecoration(
-                      hintText: "Username",
                       border: InputBorder.none,
                     ),
                   ),
@@ -94,8 +92,7 @@ class _Loginpage extends State<LoginPages> {
                     style: TextStyle(color: Colors.black54),
                     obscureText: true,
                     controller: _passwordcontroller,
-                    decoration: const InputDecoration(
-                        hintText: "Password", border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
               ],

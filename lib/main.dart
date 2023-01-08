@@ -2,6 +2,7 @@ import 'package:classmeetroom/pages/main_page.dart';
 import 'package:classmeetroom/pages/pelajaran_ui.dart';
 import 'package:classmeetroom/pages/signup_ui.dart';
 import 'package:classmeetroom/pages/tugas_ui.dart';
+import 'package:classmeetroom/pages/userprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           primarySwatch: Colors.blue,
-          textTheme: TextTheme(
+          textTheme:  TextTheme(
               titleLarge: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w400,
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/Home', page: () => Main_pages()),
         GetPage(name: '/Mapel', page: () => Mapel()),
         GetPage(name: '/SignUp', page: () => SignUp()),
-        GetPage(name: '/detail', page: () => Tugas())
+        GetPage(name: '/detail', page: () => Tugas()),
+        GetPage(name: '/editprofile', page: () => UserProfile())
       ]
 
       // '/': (context) => Main_pages(),

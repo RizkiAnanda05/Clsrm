@@ -52,7 +52,7 @@ class _homepage extends State<HomePage> {
                   margin:
                       const EdgeInsets.only(bottom: 10, left: 10, right: 10),
                   width: double.infinity,
-                  height: 200,
+                  height: 230,
                   child: Column(
                     children: [
                       const SizedBox(
@@ -94,29 +94,100 @@ class _homepage extends State<HomePage> {
                                             const SizedBox(
                                               height: 35,
                                             ),
-                                            Text(
-                                              data['name'],
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge,
-                                            ),
-                                            Text(
-                                              data['nisn'],
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall,
-                                            ),
-                                            Text(
-                                              data['phone'],
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall,
-                                            ),
-                                            Text(
-                                              data['kelas'],
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall,
+                                            Container(
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      children: [
+                                                        Text(
+                                                          data['name'],
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge,
+                                                        ),
+                                                        Text(
+                                                          data['nisn'],
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleSmall,
+                                                        ),
+                                                        Text(
+                                                          data['phone'],
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleSmall,
+                                                        ),
+                                                        Text(
+                                                          data['kelas'],
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleSmall,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  // FirebaseAuth.instance.signOut();
+                                                                  Get.toNamed(
+                                                                      "/editprofile",
+                                                                      arguments:
+                                                                          users
+                                                                              .uid);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                  "Profile",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                )),
+                                                            const Icon(
+                                                                Icons.edit),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Positioned(
+                                                      top: 70,
+                                                      child: Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 100),
+                                                          width: 80,
+                                                          height: 80,
+                                                          child: CircleAvatar(
+                                                              radius: 100,
+                                                              backgroundColor:
+                                                                  Colors.white,
+                                                              child: ClipOval(
+                                                                child: SizedBox(
+                                                                  height: 100,
+                                                                  width: 100,
+                                                                  child: (data[
+                                                                              'image'] !=
+                                                                          null)
+                                                                      ? Image.network(
+                                                                          data[
+                                                                              'image'],
+                                                                          fit: BoxFit
+                                                                              .fill)
+                                                                      : Image
+                                                                          .asset(
+                                                                          'assets/images/onboard_image.png',
+                                                                          fit: BoxFit
+                                                                              .fill,
+                                                                        ),
+                                                                ),
+                                                              ))),
+                                                    ),
+                                                  ]),
                                             )
                                           ],
                                         ),
@@ -133,20 +204,6 @@ class _homepage extends State<HomePage> {
                       ),
                     ],
                   )),
-              Positioned(
-                top: 70,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 5),
-                    borderRadius: BorderRadius.circular(100),
-                    image: const DecorationImage(
-                        image: AssetImage('assets/images/onboard_image.png'),
-                        fit: BoxFit.cover),
-                  ),
-                ),
-              ),
             ],
           ),
           Expanded(
@@ -198,11 +255,6 @@ class _homepage extends State<HomePage> {
                   }),
             )),
           ),
-          TextButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              child: Text("Logout"))
         ],
       ),
     );

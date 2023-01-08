@@ -83,9 +83,7 @@ class _signup extends State<SignUp> {
                   child: TextFormField(
                     controller: _emailcontroller,
                     style: TextStyle(color: Colors.black54),
-                    decoration: const InputDecoration(
-                        hintText: "Example@gmial.com",
-                        border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
                 const Align(
@@ -108,8 +106,7 @@ class _signup extends State<SignUp> {
                   child: TextFormField(
                     controller: _username,
                     style: TextStyle(color: Colors.black54),
-                    decoration: const InputDecoration(
-                        hintText: "Username", border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
                 const Align(
@@ -132,8 +129,7 @@ class _signup extends State<SignUp> {
                   child: TextFormField(
                     controller: _numberphone,
                     style: TextStyle(color: Colors.black54),
-                    decoration: const InputDecoration(
-                        hintText: "No Telepon", border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
                 const Align(
@@ -156,8 +152,7 @@ class _signup extends State<SignUp> {
                   child: TextFormField(
                     controller: _kelas,
                     style: TextStyle(color: Colors.black54),
-                    decoration: const InputDecoration(
-                        hintText: "Kelas", border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
                 const Align(
@@ -180,8 +175,7 @@ class _signup extends State<SignUp> {
                   child: TextFormField(
                     controller: _nisn,
                     style: TextStyle(color: Colors.black54),
-                    decoration: const InputDecoration(
-                        hintText: "Nisn", border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
                 const Align(
@@ -205,8 +199,7 @@ class _signup extends State<SignUp> {
                     controller: _passwordcontroller,
                     obscureText: true,
                     style: TextStyle(color: Colors.black54),
-                    decoration: const InputDecoration(
-                        hintText: "Password", border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
                 const Align(
@@ -230,8 +223,7 @@ class _signup extends State<SignUp> {
                     controller: _confirmpass,
                     style: TextStyle(color: Colors.black54),
                     obscureText: true,
-                    decoration: const InputDecoration(
-                        hintText: "Re-type Password", border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
                 const SizedBox(
